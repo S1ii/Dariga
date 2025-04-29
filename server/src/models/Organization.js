@@ -43,10 +43,10 @@ const Organization = {
   // Создать новую организацию
   create: (orgData) => {
     return new Promise((resolve, reject) => {
-      const { name, address, contactPerson, phone, email, status, user_id } = orgData;
+      const { name, address, contactPerson, phone, email, status, type, industry, employees, user_id } = orgData;
       
-      const sql = `INSERT INTO organizations (name, address, contactPerson, phone, email, status, user_id) 
-                   VALUES (?, ?, ?, ?, ?, ?, ?)`;
+      const sql = `INSERT INTO organizations (name, address, contactPerson, phone, email, status, type, industry, employees, user_id) 
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
       
       db.run(sql, [
         name, 
@@ -55,6 +55,9 @@ const Organization = {
         phone, 
         email, 
         status || 'active',
+        type || 'ООО',
+        industry || '',
+        employees || 0,
         user_id
       ], function(err) {
         if (err) {
@@ -72,11 +75,11 @@ const Organization = {
   // Обновить организацию
   update: (id, orgData) => {
     return new Promise((resolve, reject) => {
-      const { name, address, contactPerson, phone, email, status } = orgData;
+      const { name, address, contactPerson, phone, email, status, type, industry, employees } = orgData;
       
       const sql = `UPDATE organizations 
                    SET name = ?, address = ?, contactPerson = ?, phone = ?, email = ?, status = ?,
-                       updatedAt = CURRENT_TIMESTAMP
+                       type = ?, industry = ?, employees = ?, updatedAt = CURRENT_TIMESTAMP
                    WHERE id = ?`;
       
       db.run(sql, [
@@ -86,6 +89,9 @@ const Organization = {
         phone, 
         email, 
         status, 
+        type || 'ООО',
+        industry || '',
+        employees || 0,
         id
       ], function(err) {
         if (err) {
